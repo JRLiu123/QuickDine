@@ -16,7 +16,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 /**
- * 配置类，注册web层相关组件
+ * configuration class，register web layer component
  */
 @Configuration
 @Slf4j
@@ -26,31 +26,33 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
 
     /**
-     * 注册自定义拦截器
+     * registering custom interceptors
      *
      * @param registry
      */
     protected void addInterceptors(InterceptorRegistry registry) {
-        log.info("开始注册自定义拦截器...");
+        log.info("Start registering custom interceptors...");
         registry.addInterceptor(jwtTokenAdminInterceptor)
                 .addPathPatterns("/admin/**")
                 .excludePathPatterns("/admin/employee/login");
     }
 
     /**
-     * 通过knife4j生成接口文档
+     * creating api document by knife4j
      * @return
      */
     @Bean
     public Docket docket() {
+        log.info("Start creating api documents...");
         ApiInfo apiInfo = new ApiInfoBuilder()
-                .title("苍穹外卖项目接口文档")
+                .title("Takeout project api document")
                 .version("2.0")
-                .description("苍穹外卖项目接口文档")
+                .description("Takeout project api document")
                 .build();
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo)
                 .select()
+                // specify the scanning package needed for creating api
                 .apis(RequestHandlerSelectors.basePackage("com.sky.controller"))
                 .paths(PathSelectors.any())
                 .build();
@@ -58,10 +60,11 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     }
 
     /**
-     * 设置静态资源映射
+     * configure static resource mapping
      * @param registry
      */
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        log.info("Start static resource mapping...");
         registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
