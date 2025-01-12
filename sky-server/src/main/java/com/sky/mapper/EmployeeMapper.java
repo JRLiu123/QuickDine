@@ -35,4 +35,10 @@ public interface EmployeeMapper {
      */
 
     Page<Employee> pageQuery(EmployeePageQueryDTO employeePageQueryDTO);
+
+    /**
+     * Dynamically modify status according to id
+     * @param employee
+     */
+    void update(Employee employee);
 }
