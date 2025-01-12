@@ -121,4 +121,32 @@ public class EmployeeController {
         return Result.success();
     }
 
+    /**
+     * Get employee info by Id
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    @ApiOperation("Get employee info by Id")
+    public Result<Employee> getById(@PathVariable Long id){
+        Employee employee = employeeService.getById(id);
+        return Result.success(employee);
+    }
+
+    /**
+     * Modify employee info
+     * @param employeeDTO
+     * @return
+     */
+
+    @PutMapping
+    @ApiOperation("Modify employee info")
+    // @RequestBody is a powerful Spring MVC annotation that simplifies handling HTTP request
+    // bodies by automatically converting JSON into Java objects.
+    public Result update(@RequestBody EmployeeDTO employeeDTO){
+        log.info("Modify employee info: {}", employeeDTO);
+        employeeService.update(employeeDTO);
+        return Result.success();
+    }
+
 }
