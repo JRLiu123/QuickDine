@@ -1,7 +1,11 @@
 package com.sky.service;
 
 import com.sky.dto.DishDTO;
+import com.sky.dto.DishPageQueryDTO;
+import com.sky.result.PageResult;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * ClassName: DishService
@@ -19,4 +23,17 @@ public interface DishService {
      * @param dishDTO
      */
     public void saveWithFlavor(DishDTO dishDTO);
+
+    /**
+     * Dish page query
+     * @param dishPageQueryDTO
+     * @return
+     */
+    PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO);
+    /**
+     * delete dishes
+     * @param ids
+     * @return
+     */
+    void deleteBatch(List<Long> ids);
 }

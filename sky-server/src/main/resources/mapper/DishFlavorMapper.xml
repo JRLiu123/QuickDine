@@ -11,4 +11,5 @@
                 </foreach>
 
     </insert>
+    <delete id="deleteById"></delete>
 </mapper>

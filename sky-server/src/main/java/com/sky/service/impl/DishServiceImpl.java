@@ -1,11 +1,20 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.sky.constant.MessageConstant;
+import com.sky.constant.StatusConstant;
 import com.sky.dto.DishDTO;
+import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
+import com.sky.mapper.SetmealDishMapper;
+import com.sky.result.PageResult;
 import com.sky.service.DishService;
+import com.sky.vo.DishVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +37,9 @@ public class DishServiceImpl implements DishService {
     private DishMapper dishMapper;
     @Autowired
     private DishFlavorMapper dishFlavorMapper;
+
+    @Autowired
+    private SetmealDishMapper setmealDishMapper;
     /**
      * Add new dish adn flavor
      * @param dishDTO
@@ -54,4 +66,51 @@ public class DishServiceImpl implements DishService {
             dishFlavorMapper.insertBatch(flavors);
         }
     }
+
+    /**
+     * Dish page query
+     * @param dishPageQueryDTO
+     * @return
+     */
+
+    @Override
+    public PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO) {
+        PageHelper.startPage(dishPageQueryDTO.getPage(), dishPageQueryDTO.getPageSize());
+        Page<DishVO> page = dishMapper.pageQuery(dishPageQueryDTO);
+        return new PageResult(page.getTotal(), page.getResult());
+    }
+    /**
+     * delete dishes
+     * @param ids
+     * @return
+     */
+    @Override
+    @Transactional
+    public void deleteBatch(List<Long> ids) {
+        // 1. check if current dish is being selling -- if so, we can't delete it.
+        for(Long id : ids){
+            Dish dish = dishMapper.getById(id);
+            if(dish.getStatus() == StatusConstant.ENABLE){
+                throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
+            }
+        }
+
+        // 2. check if current dish belongs to a set -- if so, we can't delete it.
+        List<Long> setmeanIds = setmealDishMapper.getSetmealIdsByDishIds(ids);
+        if(setmeanIds != null && setmeanIds.size() > 0){
+            throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
+        }
+
+
+        // 3. If we can delete
+
+        // (1) delete corresponding data in dish table
+        for (Long id : ids) {
+            dishMapper.deleteById(id);
+            // (2) delete corresponding data in dish flavor table
+            dishFlavorMapper.deleteByDishId(id);
+        }
+
+    }
+
 }
