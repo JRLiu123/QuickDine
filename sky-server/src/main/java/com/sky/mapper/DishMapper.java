@@ -52,8 +52,15 @@ public interface DishMapper {
     @Delete("delete from dish where id = #{id}")
     void deleteById(Long id);
     /**
-     * atch delete dish data based on the collection of dish IDs.
+     * delete dish data based on the collection of dish IDs.
      * @param ids
      */
     void deleteByIds(List<Long> ids);
+
+    /**
+     * Dynamically modify dish info
+     * @param dish
+     */
+    @AutoFill(value = OperationType.UPDATE)
+    void update(Dish dish);
 }
