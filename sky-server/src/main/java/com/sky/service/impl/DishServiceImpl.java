@@ -105,11 +105,21 @@ public class DishServiceImpl implements DishService {
         // 3. If we can delete
 
         // (1) delete corresponding data in dish table
-        for (Long id : ids) {
-            dishMapper.deleteById(id);
-            // (2) delete corresponding data in dish flavor table
-            dishFlavorMapper.deleteByDishId(id);
-        }
+//        for (Long id : ids) {
+//            dishMapper.deleteById(id);
+//            // (2) delete corresponding data in dish flavor table
+//            dishFlavorMapper.deleteByDishId(id);
+//        }
+
+
+
+        // Batch delete dish data based on the collection of dish IDs.
+        // sql: delete from dish where id in(?,?,?)
+        dishMapper.deleteByIds(ids);
+
+        // Batch delete dish flavor data based on the collection of dish IDs.
+        // sql: delete from dish_flavor where dish_id in(?,?,?)
+        dishFlavorMapper.deleteByDishIds(ids);
 
     }
 
