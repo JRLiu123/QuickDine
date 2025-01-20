@@ -44,11 +44,11 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     }
 
     /**
-     * creating api document by knife4j
+     * creating admin api document by knife4j
      * @return
      */
     @Bean
-    public Docket docket() {
+    public Docket docket1() {
         log.info("Start creating api documents...");
         ApiInfo apiInfo = new ApiInfoBuilder()
                 .title("Takeout project api document")
@@ -56,10 +56,34 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .description("Takeout project api document")
                 .build();
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("Admin Api")
                 .apiInfo(apiInfo)
                 .select()
                 // specify the scanning package needed for creating api
-                .apis(RequestHandlerSelectors.basePackage("com.sky.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.sky.controller.admin"))
+                .paths(PathSelectors.any())
+                .build();
+        return docket;
+    }
+
+    /**
+     * creating user api document by knife4j
+     * @return
+     */
+    @Bean
+    public Docket docket2() {
+        log.info("Start creating api documents...");
+        ApiInfo apiInfo = new ApiInfoBuilder()
+                .title("Takeout project api document")
+                .version("2.0")
+                .description("Takeout project api document")
+                .build();
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("User Api")
+                .apiInfo(apiInfo)
+                .select()
+                // specify the scanning package needed for creating api
+                .apis(RequestHandlerSelectors.basePackage("com.sky.controller.user"))
                 .paths(PathSelectors.any())
                 .build();
         return docket;
