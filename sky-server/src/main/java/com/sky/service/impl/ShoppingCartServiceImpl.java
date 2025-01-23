@@ -102,4 +102,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         return list;
     }
+
+    /**
+     * clean the shopping cart
+     * @return
+     */
+    @Override
+    public void cleanShoppingCart() {
+        Long userId = BaseContext.getCurrentId();
+        shoppingCartMapper.deleteByUserId(userId);
+    }
 }
