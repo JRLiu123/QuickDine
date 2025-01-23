@@ -8,10 +8,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * ClassName: ShoppintCartController
@@ -42,5 +41,17 @@ public class ShoppingCartController {
         log.info("Adding an item to the shopping cart: {}", shoppingCartDTO);
         shoppingCartService.addShoppingCart(shoppingCartDTO);
         return Result.success();
+    }
+
+    /**
+     * take a look at the shopping cart
+     * @return
+     */
+    @GetMapping("/list")
+    @ApiOperation("take a look at the shopping cart")
+    public Result<List<ShoppingCart>> list(){
+        log.info("Looking at the shopping cart...");
+        List<ShoppingCart> list = shoppingCartService.showShoppingCart();
+        return Result.success(list);
     }
 }
