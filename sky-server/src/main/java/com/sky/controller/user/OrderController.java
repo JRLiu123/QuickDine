@@ -107,4 +107,19 @@ public class OrderController {
         orderService.repetition(id);
         return Result.success();
     }
+
+    /**
+     * Customer order reminder
+     * @param id
+     * @return
+     */
+
+    @GetMapping("/reminder/{id}")
+    @ApiOperation("Customer order reminder")
+    public Result reminder(@PathVariable("id") Long id){
+        orderService.reminder(id);
+        return Result.success();
+    }
+
+
 }
