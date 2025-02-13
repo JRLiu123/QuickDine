@@ -27,7 +27,7 @@ public class OrderTask {
     /**
      * Method for handling overdue orders.
      */
-    @Scheduled(cron = "0 * * * * ? *")
+    @Scheduled(cron = "0 * * * * ?")
     public void processTimeoutOrder(){
         log.info("Scheduled task for handling overdue orders: {}", LocalDateTime.now());
 
@@ -50,7 +50,7 @@ public class OrderTask {
     /**
      * Method for handling orders whose status is always on delivery
      */
-    @Scheduled(cron = "0 0 1 * * ? *")
+    @Scheduled(cron = "0 0 1 * * ?")
     public void processDeliveryOrder(){
         log.info("handling orders whose status is always on delivery: {}", LocalDateTime.now());
 
